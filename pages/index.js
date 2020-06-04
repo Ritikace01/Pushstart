@@ -33,26 +33,26 @@ const Home = ({ doc, posts }) => {
 };
 
 export async function getStaticProps({ preview = null, previewData = {} }) {
+  const { ref } = previewData;
 
-  const { ref } = previewData
-
-  const client = Client()
+  const client = Client();
   const doc = await client.getSingle("blog_home", ref ? { ref } : null);
 
   const posts = await client.query(
-    Prismic.Predicates.at("document.type", "post"), {
+    Prismic.Predicates.at("document.type", "post"),
+    {
       orderings: "[my.post.date desc]",
-      ...(ref ? { ref } : null)
-    },
+      ...(ref ? { ref } : null),
+    }
   );
 
   return {
     props: {
       doc,
       posts: posts ? posts.results : [],
-      preview
-    }
-  }
+      preview,
+    },
+  };
 }
 
 export default Home;
